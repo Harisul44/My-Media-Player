@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "My Player",
+    "slug": "myplayerexpo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/player-icon.png",
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsPictureInPicture": true,
+          "supportsBackgroundPlayback": true
+        }
+      ],
+      "expo-font",
+      "expo-asset",
+      "expo-image"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.myplayerexpo.player",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/player-icon-foreground.png",
+        "monochromeImage": "./assets/player-icon-monochrome.png",
+        "backgroundColor": "#102522"
+      }
+    }
+  }
+}
