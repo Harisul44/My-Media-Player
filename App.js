@@ -64,6 +64,7 @@ export default function App() {
 
   const videoPlayer = useVideoPlayer(null, (player) => {
     player.staysActiveInBackground = true;
+    player.showNowPlayingNotification = true;
     player.timeUpdateEventInterval = 0.5;
   });
   const activeVideo = videos.find((video) => video.id === activeVideoId) || null;
@@ -109,7 +110,10 @@ export default function App() {
     setSection('video');
     setActiveVideoId(video.id);
     try {
-      await videoPlayer.replaceAsync(video.uri);
+      await videoPlayer.replaceAsync({
+        uri: video.uri,
+        metadata: { title: video.title, artist: video.artist },
+      });
       videoPlayer.play();
     } catch {
       Alert.alert('Unable to play video', 'Check your connection and try again.');
@@ -276,15 +280,6 @@ export default function App() {
                     <Pressable style={styles.closePreviewButton} onPress={closeVideoPreview} hitSlop={8} accessibilityLabel="Close video preview">
                       <MaterialCommunityIcons name="close" size={19} color="#FFFFFF" />
                     </Pressable>
-                    <View
-                      pointerEvents="none"
-                      style={styles.videoTimeOverlay}
-                      accessibilityLabel={`Playback time ${formatVideoTime(videoCurrentTime)} of ${videoDuration > 0 ? formatVideoTime(videoDuration) : 'unknown'}`}
-                    >
-                      <Text style={styles.videoTimeCurrent}>{formatVideoTime(videoCurrentTime)}</Text>
-                      <Text style={styles.videoTimeSeparator}>/</Text>
-                      <Text style={styles.videoTimeDuration}>{videoDuration > 0 ? formatVideoTime(videoDuration) : '--:--'}</Text>
-                    </View>
                   </View>
                 )}
                 {activeVideo && (
@@ -302,6 +297,13 @@ export default function App() {
                       style={styles.videoScrubberSlider}
                       accessibilityLabel="Video playback position"
                     />
+                  </View>
+                )}
+                {activeVideo && (
+                  <View style={styles.videoTimeRow} accessibilityLabel={`Playback time ${formatVideoTime(videoCurrentTime)} of ${videoDuration > 0 ? formatVideoTime(videoDuration) : 'unknown'}`}>
+                    <Text style={styles.videoTimeCurrent}>{formatVideoTime(videoCurrentTime)}</Text>
+                    <Text style={styles.videoTimeSeparator}>/</Text>
+                    <Text style={styles.videoTimeDuration}>{videoDuration > 0 ? formatVideoTime(videoDuration) : '--:--'}</Text>
                   </View>
                 )}
                 {activeVideo && (
@@ -500,10 +502,10 @@ const styles = StyleSheet.create({
   closePreviewButton: { position: 'absolute', top: 8, right: 8, width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(22,30,27,0.72)', alignItems: 'center', justifyContent: 'center' },
   videoPosition: { color: COLORS.muted, fontSize: 10, fontWeight: '800', letterSpacing: 1 },
   videoNowTitle: { color: COLORS.ink, fontSize: 15, fontWeight: '700', marginTop: 10 },
-  videoTimeOverlay: { position: 'absolute', bottom: 10, left: 0, right: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: 6, backgroundColor: 'transparent' },
-  videoTimeCurrent: { color: '#FFFFFF', fontSize: 10, fontWeight: '700', fontVariant: ['tabular-nums'], textShadowColor: 'rgba(0,0,0,0.8)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
-  videoTimeSeparator: { color: 'rgba(255,255,255,0.85)', fontSize: 10, textShadowColor: 'rgba(0,0,0,0.8)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
-  videoTimeDuration: { color: '#FFFFFF', fontSize: 10, fontVariant: ['tabular-nums'], textShadowColor: 'rgba(0,0,0,0.8)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
+  videoTimeRow: { minHeight: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7, paddingTop: 1 },
+  videoTimeCurrent: { color: COLORS.ink, fontSize: 10, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  videoTimeSeparator: { color: COLORS.muted, fontSize: 9 },
+  videoTimeDuration: { color: COLORS.muted, fontSize: 10, fontVariant: ['tabular-nums'] },
   videoNowSubtitle: { color: COLORS.muted, fontSize: 10, marginTop: 3 },
   videoList: { marginBottom: 12 },
   videoRow: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 2 },

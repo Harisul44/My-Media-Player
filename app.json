@@ -34,6 +34,16 @@
         "foregroundImage": "./assets/player-icon-foreground.png",
         "monochromeImage": "./assets/player-icon-monochrome.png",
         "backgroundColor": "#102522"
+      },
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9bb93cd7-e2df-4ca7-8d30-bdff2c8d3fe3"
       }
     }
   }
